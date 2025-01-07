@@ -17,6 +17,5 @@ export const globalStyle = StyleSheet.create({
         flex: 1,
         padding: 20,
         backgroundColor: globalColors.background,
-        justifyContent: 'space-evenly'
     }
 });
