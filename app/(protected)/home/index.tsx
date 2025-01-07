@@ -1,10 +1,12 @@
 import { Text, View, StyleSheet } from 'react-native';
+import { HomeScreen } from '../../../src/modules/home/presentation/screens/HomeScreen';
 
-export default function HomeScreen() {
+export default function IndexScreen() {
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Bienvenido a Home</Text>
-        </View>
+        // <View style={styles.container}>
+        //     <Text style={styles.title}>Bienvenido a Home</Text>
+        // </View>
+        <HomeScreen/>
     );
 }
 
