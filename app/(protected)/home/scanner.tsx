@@ -1,10 +1,9 @@
 import { Text, View, StyleSheet } from 'react-native';
+import { QrScannerScreen } from '../../../src/modules/qrScanner/presentation/screen/QrScannerScreen';
 
 export default function ScannerScreen() {
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Escanea tu producto</Text>
-        </View>
+        <QrScannerScreen/>
     );
 }
 
