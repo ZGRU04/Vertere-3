@@ -6,6 +6,9 @@ import { useRouter } from 'expo-router';
 import { PaperProvider } from 'react-native-paper';
 
 export const LoginScreen = () => {
+    const [token, setToken] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
     const router = useRouter();
 
     const formSubmited = (loginData: Login) => {
