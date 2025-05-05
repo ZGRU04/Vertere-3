@@ -1,12 +1,12 @@
 import { Slot } from 'expo-router';
-import { Stack } from 'expo-router/stack';
+import { PaperProvider } from 'react-native-paper';
+import Toast from 'react-native-toast-message';
 
-export default function Layout() {
-    return (
-        <Slot/>
-    );
-    // <Stack
-    //     screenOptions={{
-    //     headerShown: false, // Oculta el encabezado por defecto
-    // }}
+export default function RootLayout() {
+	return (
+		<PaperProvider>
+			<Slot />
+			<Toast/>
+		</PaperProvider>
+	);
 }

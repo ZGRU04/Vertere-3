@@ -1,6 +1,5 @@
 import { Tabs } from 'expo-router';
-import { HomeIcon, QrIcon } from '../../../src/modules/shared/components/Icons';
-import { globalColors } from '../../../src/themes/GlobalStyles';
+import { HomeIcon, QrIcon } from '../../../../src/modules/shared/components/Icons';
 
 export default function HomeTabsLayout() {
     const size = 42;
@@ -14,7 +13,7 @@ export default function HomeTabsLayout() {
                 tabBarStyle: {
                     height: 70,
                     paddingBottom: 10,
-                  },
+                }
             }}
         >
             <Tabs.Screen 

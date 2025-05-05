@@ -1,12 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { Main } from './src/Main';
-import DrawerLayout from './app/_layout';
+import { StyleSheet } from 'react-native';
+import { Slot } from 'expo-router';
 
 export default function App() {
   return (
-    //<Main/>
-    <DrawerLayout/>
+    <Slot />
   );
 }
 

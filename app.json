@@ -2,7 +2,7 @@
   "expo": {
     "name": "vertere-3",
     "slug": "vertere-3",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -39,8 +39,15 @@
           "recordAudioAndroid": true
         }
       ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ],
       "expo-router",
-      "expo-barcode-scanner"
+      "expo-barcode-scanner",
+      "expo-secure-store"
     ],
     "extra": {
       "router": {

@@ -1,5 +1,5 @@
-import { Text, View, StyleSheet } from 'react-native';
-import { QrScannerScreen } from '../../../src/modules/qrScanner/presentation/screen/QrScannerScreen';
+import { StyleSheet } from 'react-native';
+import { QrScannerScreen } from '../../../../src/modules/qrScanner/presentation/screen/QrScannerScreen';
 
 export default function ScannerScreen() {
     return (

@@ -12,7 +12,7 @@ export const papersButtonVariables = {
     primaryButton: {
         primary: globalStyleButtonsColor.primaryColor,
         accent: globalStyleButtonsColor.accentDefault,
-        fontColor: globalStyleButtonsColor.fontColor
+        fontColor: globalStyleButtonsColor.fontColor,
     },
     secondaryButton: {
         primary: globalStyleButtonsColor.secondaryColor,

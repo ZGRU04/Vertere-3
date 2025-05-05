@@ -1,5 +1,5 @@
-import { StyleSheet, View, Text } from 'react-native'
-import { Button, TextInput } from 'react-native-paper'
+import { StyleSheet, View, Text, TouchableOpacity, Pressable } from 'react-native'
+import { Button, IconButton, TextInput } from 'react-native-paper'
 import { Controller, useForm } from 'react-hook-form';
 
 import * as Yup from "yup";
@@ -11,46 +11,50 @@ import { ButtonModeEnum } from '../../../../themes/buttons/enums/ButtonMode.enum
 import { papersButtonVariables } from '../../../../themes/buttons/globalStyleButtons';
 import { Login } from '../../domain/entities/login';
 import { globalTextStyle } from '../../../../themes/errors/error';
+import { useState } from 'react';
 
 
 const loginSchema = Yup.object().shape({
-    email: Yup.string()
-        .email("Introduce un correo válido")
-        .required("El correo es obligatorio"),
+    username: Yup.string()
+        .required("El usuario es obligatorio"),
     password: Yup.string()
         .required("La contraseña es obligatoria"),
 });
 
 export const LoginFormComponent = ({ onSubmit }: { onSubmit: (data: Login) => void }) => {
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const togglePasswordVisibility = () => {
+        setIsPasswordVisible(!isPasswordVisible);
+    };
     
     const { control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(loginSchema)
     });
 
-    const submit = (data: Login) => {
-        onSubmit(data)
+    const submit = (loginData: Login) => {
+        onSubmit(loginData)
     }
+
 
     return (
         <View style={styles.container}>
             <Controller
                 control={control}
-                name="email"
+                name="username"
                 render={({ field: { onChange, onBlur, value } }) => (
                     <View>
                         <TextInput
                             style={ styles.input }
-                            label="Correo electrónico"
-                            keyboardType="email-address"
+                            label="Usuario"
                             autoCapitalize="none"
                             onBlur={ onBlur }
                             onChangeText={ onChange }
-                            value={ value }
+                            value={ value ?? '' }
                             mode={ InputModeEnum.OUTLINED }
                             activeOutlineColor={globalStyleInputColor.outlineGreyColor}
                         />
-                        {errors.email && (
-                            <Text style={globalTextStyle.error} >{errors.email.message}</Text>
+                        {errors.username && (
+                            <Text style={globalTextStyle.error} >{errors.username.message}</Text>
                         )}
                     </View>
                 )}
@@ -67,8 +71,11 @@ export const LoginFormComponent = ({ onSubmit }: { onSubmit: (data: Login) => vo
                             onChangeText={ onChange }
                             value={value}
                             mode={InputModeEnum.OUTLINED}
-                            secureTextEntry={true}
+                            secureTextEntry={!isPasswordVisible}
                             activeOutlineColor={globalStyleInputColor.outlineGreyColor}
+                            right={
+                                <TextInput.Icon icon={isPasswordVisible ? 'eye' : 'eye-off'} onPress={togglePasswordVisibility}/>
+                            }
                         />
                         {errors.password && (
                             <Text style={globalTextStyle.error}>{errors.password.message}</Text>

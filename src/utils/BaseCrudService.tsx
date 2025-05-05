@@ -1,40 +1,92 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axiosInstance from "../core/config/axiosConfig";
 
 export class BaseCrudService<T> {
-  private baseUrl: string = process.env.EXPO_PUBLIC_API_URL;
-  private sourcePath: string; 
+	sourcePath: string; 
 
-  constructor(sourcePath: string) {
-    this.sourcePath = sourcePath;
-    console.log(this.baseUrl);
-  }
+	constructor(sourcePath: string) {
+		this.sourcePath = sourcePath;
+	}
 
-  async getAll(params?: AxiosRequestConfig): Promise<T[]> {
-    const urlPath = `${this.baseUrl}/${this.sourcePath}`
-    const response = await axios.get<T[]>(urlPath, params);
-    return response.data;
-  }
+	getAll = async (filters?: Record<string, any>): Promise<T[]> => {
+        const response = await axiosInstance.get<T[]>(this.sourcePath, { params: filters });
+        return response.data;
+    };
 
-  async getById(id: string): Promise<T> {
-    const urlPath = `${this.baseUrl}/${this.sourcePath}/${id}`
-    const response = await axios.get<T>(urlPath);
-    return response.data;
-  }
+    getById = async (id: string | number): Promise<T> => {
+        const response = await axiosInstance.get<T>(`${this.sourcePath}/${id}`);
+        return response.data;
+    };
 
-  async create(item: T): Promise<T> {
-    const urlPath = `${this.baseUrl}/${this.sourcePath}`
-    const response = await axios.post<T>(urlPath, item);
-    return response.data;
-  }
+    create = async (item: T): Promise<T> => {
+        const response = await axiosInstance.post<T>(this.sourcePath, item);
+        return response.data;
+    };
 
-  async update(id: string, item: T): Promise<T> {
-    const urlPath = `${this.baseUrl}/${this.sourcePath}/${id}`
-    const response = await axios.put<T>(urlPath, item);
-    return response.data;
-  }
+    update = async (id: string | number, item: T): Promise<T> => {
+        const response = await axiosInstance.put<T>(`${this.sourcePath}/${id}`, item);
+        return response.data;
+    };
 
-  async delete(id: string): Promise<void> {
-    const urlPath = `${this.baseUrl}/${this.sourcePath}/${id}`
-    await axios.delete(urlPath);
-  }
+    delete = async (id: string | number): Promise<void> => {
+        await axiosInstance.delete(`${this.sourcePath}/${id}`);
+    };
 }
+
+// export class BaseCrudService<T> {
+//     sourcePath: string;
+//     baseUrl: string = process.env.EXPO_PUBLIC_API_URL;
+
+//     constructor(sourcePath: string) {
+//         this.sourcePath = sourcePath;
+//     }
+
+//     private async handleRequest<R>(
+//         url: string,
+//         options: RequestInit = {}
+//     ): Promise<R> {
+//         try {
+//             const response = await fetch(`${this.baseUrl}/${url}`, {
+//                 headers: { "Content-Type": "application/json" },
+//                 ...options,
+//             });
+
+//             if (!response.ok) {
+//                 throw new Error(`Error ${response.status}: ${response.statusText}`);
+//             }
+
+//             return await response.json();
+//         } catch (error) {
+//             console.error(`Error en ${options.method || "GET"} ${url}:`, error);
+//             throw error;
+//         }
+//     }
+
+//     async getAll(filters?: Record<string, any>): Promise<T[]> {
+//         const queryString = filters ? `?${new URLSearchParams(filters).toString()}` : "";
+//         return this.handleRequest<T[]>(`${this.sourcePath}${queryString}`);
+//     }
+
+//     async getById(id: string | number): Promise<T> {
+//         return this.handleRequest<T>(`${this.sourcePath}/${id}`);
+//     }
+
+//     async create(item: T): Promise<T> {
+//         return this.handleRequest<T>(this.sourcePath, {
+//             method: "POST",
+//             body: JSON.stringify(item),
+//         });
+//     }
+
+//     async update(id: string | number, item: T): Promise<T> {
+//         return this.handleRequest<T>(`${this.sourcePath}/${id}`, {
+//             method: "PUT",
+//             body: JSON.stringify(item),
+//         });
+//     }
+
+//     async delete(id: string | number): Promise<void> {
+//         await this.handleRequest<void>(`${this.sourcePath}/${id}`, {
+//             method: "DELETE",
+//         });
+//     }
+// }

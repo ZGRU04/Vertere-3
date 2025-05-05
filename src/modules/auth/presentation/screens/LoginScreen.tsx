@@ -1,29 +1,39 @@
-import React from 'react'
+import { useRouter } from 'expo-router';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+
 import { LoginFormComponent } from '../components/LoginForm';
 import { Login } from '../../domain/entities/login';
-import { useRouter } from 'expo-router';
-import { PaperProvider } from 'react-native-paper';
+import { useSession } from '../../../../context/AuthContext';
+import { authService } from '../../services/authService';
+import { UserAuth } from '../../data/models/userAuth';
+import { saveData } from '../../../../utils/StorageService';
 
 export const LoginScreen = () => {
-    const [token, setToken] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-
+    const { signIn } = useSession();
     const router = useRouter();
 
-    const formSubmited = (loginData: Login) => {
-        router.replace('/(protected)/home');
+    const saveUserIntoStorage = async (userDetail: UserAuth) => {
+        await saveData('userDetail', userDetail)
+    }
+
+    const handleLogin = async (loginData: Login) => {
+        try {
+            const authData: any = await authService.auth(loginData);
+            signIn(authData.token)
+            saveUserIntoStorage({branch_office: authData.branch_office, user: authData.data, token: authData.token})
+            router.replace('/(drawer)');
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     return (
-        <PaperProvider>
-            <SafeAreaView style={{flex:1,  backgroundColor: 'white'}}>
-                <View style={styles.container}>
-                    <Text style={styles.title}>Login</Text>
-                    <LoginFormComponent onSubmit={formSubmited}></LoginFormComponent>
-                </View>
-            </SafeAreaView>
-        </PaperProvider>
+        <SafeAreaView style={{flex:1,  backgroundColor: 'white'}}>
+            <View style={styles.container}>
+                <Text style={styles.title}>Login</Text>
+                <LoginFormComponent onSubmit={ handleLogin }></LoginFormComponent>
+            </View>
+        </SafeAreaView>
     )
 }
 
@@ -46,10 +56,3 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
 });
-
-/**
- * validacion, de inputs campo requerido  user, 
- * validacion de auth
- * redireccion de botton
- * alert de cuando algosale mal desde backend
- */
