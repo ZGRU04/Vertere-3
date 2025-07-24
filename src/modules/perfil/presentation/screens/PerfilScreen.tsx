@@ -1,17 +1,12 @@
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native'
 import { globalStyle } from '../../../../themes/GlobalStyles';
-import { ButtonModeEnum } from '../../../../themes/buttons/enums/ButtonMode.enum';
-import { papersButtonVariables } from '../../../../themes/buttons/globalStyleButtons';
-import { Button } from 'react-native-paper';
 import { getData } from '../../../../utils/StorageService';
-import { UserAuth } from '../../../auth/data/models/userAuth';
 
 export const PerfilScreen = () => {
 	const [name, setName] = useState<string | null>(null);
 	const [email, setEmail] = useState<string | null>(null);
 	const [rol, setRol] = useState<string | null>(null);
-	const [username, setUsername] = useState<string | null>(null);
 
 
 	const getUserDetail = async () => {
@@ -41,10 +36,6 @@ export const PerfilScreen = () => {
 						<Text style={styles.label} >Rol:</Text>
 						<Text style={styles.value} >{ rol ? rol : '--' }</Text>
 					</View>
-					{/* <View style={styles.row}>
-						<Text style={styles.label} >Nombre de usuario:</Text>
-						<Text style={styles.value} >{ username ? username : '--' }</Text>
-					</View> */}
 				</View>
 			</View>
 		</View>

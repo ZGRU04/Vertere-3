@@ -16,6 +16,15 @@ export const DateUtils = {
         return `${year}-${month}-${day}`;
     },
 
+    getDay: (present?: boolean): string => {
+        const today = new Date();
+        today.setDate(today.getDate() + 5);
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = present ? '31' : String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    },
+
     getCurrentDateAndHour: (): string => {
         const currentDateTime = new Date();
 

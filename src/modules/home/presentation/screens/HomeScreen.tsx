@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, Image, ActivityIndicator, ViewStyle } from 'react-native';
+import { View, Text, StyleSheet, Image, ActivityIndicator } from 'react-native';
 
 import { globalStyle } from '../../../../themes/GlobalStyles'
 import { getData } from '../../../../utils/StorageService'
@@ -21,7 +21,6 @@ import { StatusBadge } from '../../../shared/components/StatusBadge'
 import { BranchOffice } from '../../data/model/BranchOffice.model';
 import { CustomButton } from '../../../shared/components/CustomButton'
 import { useLocalSearchParams } from 'expo-router'
-import { getAllDayAttendanceUSeCase } from '../../domain/usecases/dayAttendance/getAllDayAttendanceUseCase';
 
 export const HomeScreen = () => {
     const logo = require('../../../../../assets/images/masser-logo.jpg');
@@ -51,58 +50,6 @@ export const HomeScreen = () => {
 		};
 		fetchDayAttendance();
 	}, [scanned]);
-
-	const initializeScreenTwo = async () => {
-		const employeUser = await loadUserDetailData();
-		const isPendingWorking = await getDayAttendances();
-
-	}
-
-	const getDayAttendances = async () => {
-		try {
-			const currentDay = DateUtils.getCurrentDate();
-			const yesterday = DateUtils.getYesterdayDate();
-			
-			const queryParams = {
-				employee_id: employe?.id,
-				initial_date: yesterday,
-				end_date: currentDay
-			}
-			const day_attendances: DayAttendance[] = await getAllDayAttendanceUSeCase(queryParams);
-
-			console.log(day_attendances)
-			
-			if (day_attendances.length === 0) {
-				setIsDayFounded(false);
-				return null;
-			}
-
-			if (day_attendances.length === 1) {
-				if (day_attendances[0].date === currentDay) {
-					setDayAttendance(day_attendances[0]);
-					setIsDayFounded(true);
-					return day_attendances[0];
-				} else {
-					if (day_attendances[0].status === DayAttendanceStatusEnum.STARTED) {
-						setDayAttendance(day_attendances[0]);
-						setIsDayFounded(true);
-						return day_attendances[0];
-					}
-				}
-				// verificamos si es del dia de hoy 
-				// SI = agregamos
-				// NO = verificamos si esta en iniciado para mostrarlo, sino returnar null 
-				setIsDayFounded(true);
-				setDayAttendance(day_attendances[0]);
-				return day_attendances[0];
-			}
-		} catch (error) {
-			setIsDayFounded(false);
-			return null;
-		} finally {
-			setLoading(false);
-		}
-	}
 	
 	const initializeScreen = async () => {
 		const employeUser = await loadUserDetailData();
@@ -127,7 +74,8 @@ export const HomeScreen = () => {
 			const currentDay = DateUtils.getCurrentDate();
 			const queryParams = {
 				employe_id: employeParam.id,
-				current_day: currentDay
+				current_day: currentDay,
+				day_status: DayAttendanceStatusEnum.STARTED,
 			}
 			const day_attendance: DayAttendance = await fetchDayAttendanceForEmployeUseCase(queryParams);
 			if (day_attendance.message) {
@@ -158,19 +106,15 @@ export const HomeScreen = () => {
 			const deviceLocation = await LocationService.getCurrentLocation();
 			setCurrentLatitude(deviceLocation.latitude);
 			setCurrentLongitude(deviceLocation.longitude);
-			const officeLat = branchOffice?.latitude;
-			const officeLong = branchOffice?.longitude;
-			//-17.353735, -66.187336
-			// const la = -17.3536264
-			// const lo = -66.18732771
+			let officeLat = branchOffice?.latitude;
+			let officeLong = branchOffice?.longitude;
+
 			if (!deviceLocation) {
 				throw new Error("Dispositivo no registrado.");
 			}
 			const {withinRadius, distance, radius} = LocationService.isWithinRadius(
 				officeLat!,
 				officeLong!,
-				//la,
-				//lo,
 				deviceLocation.latitude,
 				deviceLocation.longitude,
 				radio
@@ -360,8 +304,6 @@ export const HomeScreen = () => {
 												<View style={styles.rowColumn}>
 												<Text style={styles.label} >Geolocalizacion:</Text>
 												<Text style={styles.errorContainer}>
-													<Text>  Latitud: {currentLatitude}</Text>
-													<Text>  Longitud: {currentLongitude}</Text>
 													<Text>  Te encuantras a {Math.round(currentDistance - radio)}m de la sucursal debes estar a menos de {Math.round(radio)}m</Text>
 												</Text>
 											</View>

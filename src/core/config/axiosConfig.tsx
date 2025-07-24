@@ -1,9 +1,10 @@
+import Constants from "expo-constants";
 import axios, { AxiosInstance } from "axios";
 import { getData } from "../../utils/StorageService";
 import { ToastService } from "../../modules/shared/services/Toast/ToastService";
 import { baseUrl } from "./config";
 
-//const baseUrl: string = process.env.EXPO_PUBLIC_API_URL;
+//const baseUrl: string = Constants.expoConfig?.extra?.EXPO_PUBLIC_API_URL || 'patito.com'
 //const baseUrl: string = 'https://masser-dev.pricer-pro.online/vertere/api';
 const axiosInstance: AxiosInstance = axios.create({
     baseURL: baseUrl,
@@ -27,11 +28,10 @@ axiosInstance.interceptors.request.use(
     }
 );
 
-// Interceptor para manejar respuestas y errores globalmente
 axiosInstance.interceptors.response.use(
     (response) => {
       if (response.headers["content-type"]?.includes("application/json")) {
-          return response.data; // Devuelve solo los datos JSON
+          return response.data;
       } else {
           ToastService.errorToast('Error', 'Respuesta inválida del servidor.');
           return Promise.reject(new Error("La respuesta del servidor no es JSON"));

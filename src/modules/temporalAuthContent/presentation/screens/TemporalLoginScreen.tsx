@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { SafeAreaView, StyleSheet, Text, View, Image, ActivityIndicator } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View, Image } from 'react-native'
 import { useSession } from '../../../../context/AuthContext';
 import { TemporalLoginFormComponent } from '../components/TemporalLoginForm';
 import { authService } from '../../../auth/services/authService';
@@ -13,8 +13,6 @@ const TemporalLoginScreen = () => {
     const [loading, setLoading] = useState(false);
     const { signIn } = useSession();
     const router = useRouter();
-
-
 
     const saveUserIntoStorage = async (userDetail: {employe: any, token: string }) => {
        await saveData('temporalUserDetail', userDetail)
@@ -55,7 +53,6 @@ const TemporalLoginScreen = () => {
                     <View style={styles.formSection}>
                         <Text style={styles.title}>Ingresar al sistema</Text>
                         <TemporalLoginFormComponent onSubmit={handleLogin}></TemporalLoginFormComponent>
-                        
                     </View>
                 </View>
             )}

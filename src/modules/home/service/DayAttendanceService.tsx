@@ -9,6 +9,8 @@ export class DayAttendanceService extends BaseCrudService<DayAttendance>{
 
     async getSayAttendanceByEmploye(filters?: Record<string, any>): Promise<DayAttendance> {
         const urlPath = `${this.sourcePath}/employe`;
+        console.log(urlPath)
+        console.log(axiosInstance.defaults)
         const response = await axiosInstance.get<DayAttendance>(urlPath, { params: filters });
         return response as any;
     }
